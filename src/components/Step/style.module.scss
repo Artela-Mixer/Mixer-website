@@ -1,0 +1,81 @@
+.step {
+  font-size: 0.75rem;
+  min-height: 1.5rem;
+  position: relative;
+  z-index: 10;
+  // &::after {
+  //   z-index: 1;
+  //   position: absolute;
+  //   background: var(--theme-color);
+  //   width: 100%;
+  //   top: 0.7rem;
+  //   left: 0;
+  //   height: 0.1rem;
+  //   content: "";
+  // }
+}
+
+:local {
+  .marker {
+    z-index: 1;
+    width: 1.5rem;
+    height: 1.5rem;
+    position: relative;
+    border: 0.2rem solid var(--theme-color);
+    border-radius: 9999px;
+    background: var(--background);
+    .circle {
+      display: flex;
+      position: absolute;
+      left: 50%;
+      margin-left: -0.75rem;
+      bottom: 50%;
+      margin-bottom: -0.75rem;
+      width: 1.5rem;
+      height: 1.5rem;
+      transition: transform 0.15s ease-out;
+      border-radius: 50%;
+      transform: scale(0);
+      background-color: var(--theme-color);
+    }
+  }
+  .step-detail {
+    margin-top: 1rem;
+    font-size: .9rem;
+    color: #fff;
+  }
+}
+.step-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  &::before,
+  &::after {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 4px;
+    background-color: var(--theme-color);
+    top: 0.7rem;
+    transform: translateY(-50%);
+  }
+
+  &::before {
+    left: 0;
+  }
+
+  &::after {
+    right: 0;
+  }
+}
+
+.is-active {
+  :local(.marker) {
+    .circle {
+      transform: scale(0.6) !important;
+    }
+  }
+  :local(.step-detail) {
+    color: var(--theme-color) !important;
+  }
+}
