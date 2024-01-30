@@ -12,7 +12,11 @@ const Marker = () => {
 const StepItem = ({ item, isActive, onClick }) => {
   return (
     <div
-      className={classNames(Style["step-item"],isActive && Style["is-active"], "cursor-pointer")}
+      className={classNames(
+        Style["step-item"],
+        isActive && Style["is-active"],
+        "cursor-pointer"
+      )}
       onClick={onClick}
     >
       <Marker></Marker>
@@ -23,15 +27,13 @@ const StepItem = ({ item, isActive, onClick }) => {
   );
 };
 
-export const Step = ({ value, onChange }) => {
-  const data = [
-    { value: "1", label: "0.1ETH" },
-    { value: "2", label: "0.2ETH" },
-  ];
+export const Step = ({ value, onChange, items = [] }) => {
 
   return (
-    <div className={classNames(Style.step, "flex flex-row w-full justify-around")}>
-      {data?.map((item) => (
+    <div
+      className={classNames(Style.step, "flex flex-row w-full justify-around")}
+    >
+      {items?.map((item) => (
         <StepItem
           key={item.value}
           item={item}

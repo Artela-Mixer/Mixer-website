@@ -5,7 +5,7 @@ import "./globals.css";
 import "@rainbow-me/rainbowkit/styles.css";
 import { alchemyProvider } from "wagmi/providers/alchemy";
 import { publicProvider } from "wagmi/providers/public";
-import { WagmiConfig, configureChains, createConfig, mainnet } from "wagmi";
+import { WagmiConfig, configureChains, createConfig, mainnet, useConnect, useWalletClient,sepolia } from "wagmi";
 import {
   RainbowKitProvider,
   darkTheme,
@@ -13,7 +13,37 @@ import {
 } from "@rainbow-me/rainbowkit";
 import { Header } from "@/components/Header";
 
-const { chains, publicClient } = configureChains([mainnet], [publicProvider()]);
+const avalanche = {
+  id: 11822,
+  name: "Artela",
+  network: "artela",
+  // iconUrl: "https://example.com/icon.svg",
+  iconBackground: "#fff",
+  nativeCurrency: {
+    decimals: 18,
+    name: "Artela",
+    symbol: "ART",
+  },
+  rpcUrls: {
+    public: { http: ["https://betanet-rpc2.artela.network"] },
+    default: { http: ["https://betanet-rpc2.artela.network"] },
+  },
+  blockExplorers: {
+    default: { name: "SnowTrace", url: "https://snowtrace.io" },
+    etherscan: { name: "SnowTrace", url: "https://snowtrace.io" },
+  },
+  contracts: {
+    multicall3: {
+      address: "0xd3F51f2Dff074a6A49e64B38b3946E91f677965b",
+    },
+  },
+  testnet: false,
+};
+
+const { chains, publicClient } = configureChains(
+  [avalanche],
+  [publicProvider()]
+);
 
 const { connectors } = getDefaultWallets({
   appName: "Mixer",
@@ -27,7 +57,6 @@ const wagmiConfig = createConfig({
   publicClient,
 });
 const inter = Inter({ subsets: ["latin"] });
-
 
 export default function RootLayout({
   children,

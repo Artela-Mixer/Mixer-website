@@ -7,8 +7,9 @@
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
   --background-end-rgb: 255, 255, 255;
-  --background: #000403;
-  --theme-color: #FF9C6A;
+  --background: #FFF7F4;
+  /* --theme-color: #FF9C6A; */
+  --theme-color: #000;
 }
 
 @media (prefers-color-scheme: dark) {
