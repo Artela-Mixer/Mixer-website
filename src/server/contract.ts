@@ -14,8 +14,9 @@ async function setRoot(contract) {
       mode: "cors",
       headers: { "Content-Type": "application/json", accept: "*/*" },
     });
-    console.log(JSON.stringify(response.json()),333)
+    // console.log(JSON.stringify(response.json()),333)
     if (response.ok) {
+      // const data = response;
       const data = await response.json();
       console.log(data);
       const root = data.data.root;

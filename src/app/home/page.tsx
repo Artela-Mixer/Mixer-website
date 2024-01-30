@@ -1,7 +1,7 @@
 "use client";
 import { Card } from "@/components/CardContainer";
 import { Step } from "@/components/Step";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Irish_Grover } from "@next/font/google";
 import { Timer } from "@/components/Timer";
 import { Status } from "@/components/AMLStatus";
@@ -24,16 +24,13 @@ const Store = React.createContext(null);
 
 const Home = () => {
   const [value, setValue] = useState(0);
-  const {address} = useAccount();
- const eee =  useWalletClient()
+  const { address } = useAccount();
+
   useEffect(() => {
-    if(typeof window !=='undefined'){
-      window.ethers = ethers
-      depositToContract()
+    console.log(typeof address, address, 111);
+    if (!!address) {
+      depositToContract();
     }
-    
-    
-    // deposit({write})
   }, [address]);
   return (
     <div className="container flex flex-col gap-10">
@@ -63,9 +60,8 @@ const Home = () => {
 
 export default () => {
   const state = useStoreState();
-  return (
-    <Store.Provider value={{ ...state }}>
-      <Home></Home>
-    </Store.Provider>
-  );
+  useEffect(() => {
+    console.log("gbbbbbbbbb");
+  }, []);
+  return <Home></Home>;
 };

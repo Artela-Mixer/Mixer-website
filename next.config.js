@@ -16,6 +16,7 @@ const nextConfig = {
     // 忽略在构建时的ESLint错误
     ignoreDuringBuilds: true,
   },
+  reactStrictMode: false
 };
 
 module.exports = nextConfig;

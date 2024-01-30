@@ -1,11 +1,18 @@
 "use client";
-
 import { Inter } from "next/font/google";
 import "./globals.css";
 import "@rainbow-me/rainbowkit/styles.css";
 import { alchemyProvider } from "wagmi/providers/alchemy";
 import { publicProvider } from "wagmi/providers/public";
-import { WagmiConfig, configureChains, createConfig, mainnet, useConnect, useWalletClient,sepolia } from "wagmi";
+import {
+  WagmiConfig,
+  configureChains,
+  createConfig,
+  mainnet,
+  useConnect,
+  useWalletClient,
+  sepolia,
+} from "wagmi";
 import {
   RainbowKitProvider,
   darkTheme,
