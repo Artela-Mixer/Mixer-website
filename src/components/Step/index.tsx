@@ -1,6 +1,11 @@
 import { classNames } from "@/utils/classNames";
 import Style from "./style.module.scss";
 
+type ItemType = {
+  value: string;
+  label: string;
+};
+
 const Marker = () => {
   return (
     <div className={classNames(Style.marker)}>
@@ -27,7 +32,7 @@ const StepItem = ({ item, isActive, onClick }) => {
   );
 };
 
-export const Step = ({ value, onChange, items = [] }) => {
+export const Step = ({ value, onChange, items = [] } : { value : string,onChange : (value: string) => void,items : ItemType[]}) => {
 
   return (
     <div

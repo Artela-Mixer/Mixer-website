@@ -1,15 +1,14 @@
-import { abi } from "@/abi";
 import { ethers, sha256 } from "ethers";
 import MerkleTree from "merkletreejs";
-const sender = "0x4Cfa91a4061a4438EC6F8fBcFe207897856504A9";
-
+import { abi,contractAddress } from ".";
+export let contract = null as any;
 // 我的理解，每次首先需要将所有地址传进来（参考实现），import生成一个根， 然后合约交互更新一次。
-async function setRoot(contract) {
+async function setRoot(address) {
   try {
     const response = await fetch("http://yiwokan.com:24128/whitelist/import", {
       method: "POST",
       body: JSON.stringify({
-        addr: [sender, "0x8953dfbd3F3cB19b77E71DdF1179FEDf12EF20F0"],
+        addr: [address, "0x8953dfbd3F3cB19b77E71DdF1179FEDf12EF20F0"],
       }),
       mode: "cors",
       headers: { "Content-Type": "application/json", accept: "*/*" },
@@ -38,10 +37,10 @@ async function setRoot(contract) {
   }
 }
 // 存钱，可以参考我写的交互。
-async function deposit(contract) {
+export async function deposit(address, amount) {
   try {
     // 发送以太币到智能合约
-    const amountToSend = ethers.parseEther("0.1"); // 转账金额，这里是 0.1 ETH
+    const amountToSend = ethers.parseEther(amount); // 转账金额，这里是 0.1 ETH
     const root = await contract.getRoot();
     console.log("deposit getRoot : ", root);
     const response = await fetch("http://yiwokan.com:24128/whitelist/query", {
@@ -52,11 +51,11 @@ async function deposit(contract) {
       },
       mode: "cors",
       body: JSON.stringify({
-        addr: sender,
+        addr: address,
         root: root,
       }),
     });
-    console.log("data", response,999);
+    console.log("data", response, 999);
     if (response.ok) {
       const data = await response.json();
       console.log("data", data);
@@ -80,281 +79,37 @@ async function deposit(contract) {
     console.log("deposit Error", error);
   }
 }
-// 加油，我开会去了
+
+export async function withdraw(amount) {
+  const amountToSend = ethers.parseEther(amount); // 转账金额，这里是 0.1 ETH
+  try {
+    const tx = await contract.withdraw(amountToSend);
+    await tx.wait();
+    console.log("Withdraw success");
+  } catch (error) {
+    console.error(error);
+  }
+}
 
 export async function depositToContract() {
   // 连接到Aspect 测试网络
-  // const provider = new ethers.JsonRpcProvider(
-  //   "https://betanet-rpc2.artela.network"
-  // );
   const provider = new ethers.BrowserProvider(window.ethereum);
-  const chainId = 11822;
-  await provider.send('wallet_switchEthereumChain', [{ chainId: `0x${chainId.toString(16)}` }]);
+   const chainId = 11822;
+  await provider.send("wallet_switchEthereumChain", [
+    { chainId: `0x${chainId.toString(16)}` },
+  ]);
   // await window.ethereum.enable();
-  const signer =await provider.getSigner()
+
+  const signer = await provider.getSigner();
+  const address = await signer.getAddress();
   // 设置智能合约地址
-  const contractAddress = "0xd3F51f2Dff074a6A49e64B38b3946E91f677965b";
+  // const contractAddress = "0xd3F51f2Dff074a6A49e64B38b3946E91f677965b";
 
   // 实例化智能合约
-  const abi = [
-    {
-      inputs: [
-        {
-          internalType: "bytes32",
-          name: "_root",
-          type: "bytes32",
-        },
-      ],
-      stateMutability: "nonpayable",
-      type: "constructor",
-    },
-    {
-      inputs: [
-        {
-          internalType: "address",
-          name: "owner",
-          type: "address",
-        },
-      ],
-      name: "OwnableInvalidOwner",
-      type: "error",
-    },
-    {
-      inputs: [
-        {
-          internalType: "address",
-          name: "account",
-          type: "address",
-        },
-      ],
-      name: "OwnableUnauthorizedAccount",
-      type: "error",
-    },
-    {
-      anonymous: false,
-      inputs: [
-        {
-          indexed: true,
-          internalType: "address",
-          name: "user",
-          type: "address",
-        },
-        {
-          indexed: false,
-          internalType: "uint256",
-          name: "amount",
-          type: "uint256",
-        },
-      ],
-      name: "Deposit",
-      type: "event",
-    },
-    {
-      anonymous: false,
-      inputs: [
-        {
-          indexed: true,
-          internalType: "address",
-          name: "previousOwner",
-          type: "address",
-        },
-        {
-          indexed: true,
-          internalType: "address",
-          name: "newOwner",
-          type: "address",
-        },
-      ],
-      name: "OwnershipTransferred",
-      type: "event",
-    },
-    {
-      anonymous: false,
-      inputs: [
-        {
-          indexed: true,
-          internalType: "bytes32",
-          name: "root",
-          type: "bytes32",
-        },
-      ],
-      name: "RootUpdated",
-      type: "event",
-    },
-    {
-      anonymous: false,
-      inputs: [
-        {
-          indexed: true,
-          internalType: "address",
-          name: "user",
-          type: "address",
-        },
-        {
-          indexed: false,
-          internalType: "uint256",
-          name: "amount",
-          type: "uint256",
-        },
-      ],
-      name: "Withdrawal",
-      type: "event",
-    },
-    {
-      inputs: [
-        {
-          internalType: "bytes32[]",
-          name: "proof",
-          type: "bytes32[]",
-        },
-      ],
-      name: "deposit",
-      outputs: [],
-      stateMutability: "payable",
-      type: "function",
-    },
-    {
-      inputs: [
-        {
-          internalType: "address",
-          name: "",
-          type: "address",
-        },
-      ],
-      name: "deposits",
-      outputs: [
-        {
-          internalType: "uint256",
-          name: "",
-          type: "uint256",
-        },
-      ],
-      stateMutability: "view",
-      type: "function",
-    },
-    {
-      inputs: [],
-      name: "getRoot",
-      outputs: [
-        {
-          internalType: "bytes32",
-          name: "",
-          type: "bytes32",
-        },
-      ],
-      stateMutability: "view",
-      type: "function",
-    },
-    {
-      inputs: [],
-      name: "isOwner",
-      outputs: [
-        {
-          internalType: "bool",
-          name: "",
-          type: "bool",
-        },
-      ],
-      stateMutability: "pure",
-      type: "function",
-    },
-    {
-      inputs: [],
-      name: "is_verified",
-      outputs: [
-        {
-          internalType: "uint32",
-          name: "",
-          type: "uint32",
-        },
-      ],
-      stateMutability: "view",
-      type: "function",
-    },
-    {
-      inputs: [],
-      name: "owner",
-      outputs: [
-        {
-          internalType: "address",
-          name: "",
-          type: "address",
-        },
-      ],
-      stateMutability: "view",
-      type: "function",
-    },
-    {
-      inputs: [],
-      name: "renounceOwnership",
-      outputs: [],
-      stateMutability: "nonpayable",
-      type: "function",
-    },
-    {
-      inputs: [
-        {
-          internalType: "bytes32",
-          name: "_root",
-          type: "bytes32",
-        },
-      ],
-      name: "setRoot",
-      outputs: [],
-      stateMutability: "nonpayable",
-      type: "function",
-    },
-    {
-      inputs: [
-        {
-          internalType: "address",
-          name: "newOwner",
-          type: "address",
-        },
-      ],
-      name: "transferOwnership",
-      outputs: [],
-      stateMutability: "nonpayable",
-      type: "function",
-    },
-    {
-      inputs: [
-        {
-          internalType: "bytes32[]",
-          name: "proof",
-          type: "bytes32[]",
-        },
-        {
-          internalType: "address",
-          name: "addr",
-          type: "address",
-        },
-      ],
-      name: "verify",
-      outputs: [],
-      stateMutability: "nonpayable",
-      type: "function",
-    },
-    {
-      inputs: [
-        {
-          internalType: "uint256",
-          name: "amount",
-          type: "uint256",
-        },
-      ],
-      name: "withdraw",
-      outputs: [],
-      stateMutability: "nonpayable",
-      type: "function",
-    },
-  ];
   // 合约生成
-  const contract = new ethers.Contract(contractAddress, abi, signer);
-  
-  await setRoot(contract)
-  // 应用方法
-  await deposit(contract);
+  contract = new ethers.Contract(contractAddress, abi, signer);
+  await setRoot(address);
 }
+
 
 // depositToContract().then(() => console.log("Process complete."));

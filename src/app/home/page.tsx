@@ -34,7 +34,7 @@ const Home = () => {
   }, [address]);
   return (
     <div className="container flex flex-col gap-10">
-      <div className="select-none text-blue-400 flex justify-center">
+      <div className="select-none  flex justify-center">
         <p className={`${Irish.className}` + " text-8xl"}>Mixer</p>
       </div>
       {/* <div className="grid grid-cols-3 grid-flow-col gap-x-1 gap-y-8"> */}
