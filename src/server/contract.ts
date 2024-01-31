@@ -1,6 +1,6 @@
 import { ethers, sha256 } from "ethers";
-import MerkleTree from "merkletreejs";
-import { abi,contractAddress } from ".";
+import { MerkleTree } from "merkletreejs";
+import { abi, contractAddress } from ".";
 export let contract = null as any;
 // 我的理解，每次首先需要将所有地址传进来（参考实现），import生成一个根， 然后合约交互更新一次。
 async function setRoot(address) {
@@ -94,7 +94,7 @@ export async function withdraw(amount) {
 export async function depositToContract() {
   // 连接到Aspect 测试网络
   const provider = new ethers.BrowserProvider(window.ethereum);
-   const chainId = 11822;
+  const chainId = 11822;
   await provider.send("wallet_switchEthereumChain", [
     { chainId: `0x${chainId.toString(16)}` },
   ]);
@@ -110,6 +110,5 @@ export async function depositToContract() {
   contract = new ethers.Contract(contractAddress, abi, signer);
   await setRoot(address);
 }
-
 
 // depositToContract().then(() => console.log("Process complete."));
