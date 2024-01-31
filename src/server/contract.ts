@@ -1,5 +1,5 @@
-import { ethers, sha256 } from "ethers";
 import { MerkleTree } from "merkletreejs";
+import { ethers, sha256 } from "ethers";
 import { abi, contractAddress } from ".";
 export let contract = null as any;
 // 我的理解，每次首先需要将所有地址传进来（参考实现），import生成一个根， 然后合约交互更新一次。

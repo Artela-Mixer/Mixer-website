@@ -29,7 +29,9 @@ const Home = () => {
   useEffect(() => {
     console.log(typeof address, address, 111);
     if (!!address) {
-      depositToContract();
+      setTimeout(() => {
+        depositToContract();
+      }, 200);
     }
   }, [address]);
   return (
