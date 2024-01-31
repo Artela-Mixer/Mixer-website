@@ -1,10 +1,9 @@
-import { abi } from "@/abi";
 import { ethers, sha256 } from "ethers";
 import MerkleTree from "merkletreejs";
-const sender = "0x4Cfa91a4061a4438EC6F8fBcFe207897856504A9";
+import { abi,contractAddress } from ".";
 export let contract = null as any;
 // 我的理解，每次首先需要将所有地址传进来（参考实现），import生成一个根， 然后合约交互更新一次。
-async function setRoot(address, contract) {
+async function setRoot(address) {
   try {
     const response = await fetch("http://yiwokan.com:24128/whitelist/import", {
       method: "POST",
@@ -94,10 +93,8 @@ export async function withdraw(amount) {
 
 export async function depositToContract() {
   // 连接到Aspect 测试网络
-  console.log(333333);
   const provider = new ethers.BrowserProvider(window.ethereum);
-  const chainId = 11822;
-  console.log(222222);
+   const chainId = 11822;
   await provider.send("wallet_switchEthereumChain", [
     { chainId: `0x${chainId.toString(16)}` },
   ]);
@@ -105,17 +102,13 @@ export async function depositToContract() {
 
   const signer = await provider.getSigner();
   const address = await signer.getAddress();
-  console.log(111111, signer.getAddress());
   // 设置智能合约地址
-  const contractAddress = "0xd3F51f2Dff074a6A49e64B38b3946E91f677965b";
+  // const contractAddress = "0xd3F51f2Dff074a6A49e64B38b3946E91f677965b";
 
   // 实例化智能合约
   // 合约生成
   contract = new ethers.Contract(contractAddress, abi, signer);
-
-  await setRoot(address, contract);
-  // 应用方法
-  // await deposit(address,contract);
+  await setRoot(address);
 }
 
 

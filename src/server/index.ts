@@ -1,8 +1,10 @@
-import { ethers ,sha256} from "ethers";
+import { ethers, sha256 } from "ethers";
 import MerkleTree from "merkletreejs";
 
 // 设置智能合约地址
-export const contractAddress = "0xe10C01717fFaca6eb4679dCA60C53F5f4902Fd8a";
+// export const contractAddress = "0xe10C01717fFaca6eb4679dCA60C53F5f4902Fd8a";
+// export const contractAddress = "0xd7CC30001A30B0a890d1078E06DFc493E6CF1632";
+export const contractAddress = "0x752B212D855846aa91C7B0fc345C0C3012e591DD";
 
 // 实例化智能合约
 export const abi = [
@@ -16,28 +18,6 @@ export const abi = [
 		],
 		"stateMutability": "nonpayable",
 		"type": "constructor"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "owner",
-				"type": "address"
-			}
-		],
-		"name": "OwnableInvalidOwner",
-		"type": "error"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "account",
-				"type": "address"
-			}
-		],
-		"name": "OwnableUnauthorizedAccount",
-		"type": "error"
 	},
 	{
 		"anonymous": false,
@@ -63,25 +43,6 @@ export const abi = [
 		"inputs": [
 			{
 				"indexed": true,
-				"internalType": "address",
-				"name": "previousOwner",
-				"type": "address"
-			},
-			{
-				"indexed": true,
-				"internalType": "address",
-				"name": "newOwner",
-				"type": "address"
-			}
-		],
-		"name": "OwnershipTransferred",
-		"type": "event"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": true,
 				"internalType": "bytes32",
 				"name": "root",
 				"type": "bytes32"
@@ -92,27 +53,13 @@ export const abi = [
 	},
 	{
 		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": true,
-				"internalType": "address",
-				"name": "addr",
-				"type": "address"
-			}
-		],
-		"name": "VerifyFaild",
+		"inputs": [],
+		"name": "VerifyFailed",
 		"type": "event"
 	},
 	{
 		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": true,
-				"internalType": "address",
-				"name": "addr",
-				"type": "address"
-			}
-		],
+		"inputs": [],
 		"name": "VerifySucceed",
 		"type": "event"
 	},
@@ -207,26 +154,6 @@ export const abi = [
 		"type": "function"
 	},
 	{
-		"inputs": [],
-		"name": "owner",
-		"outputs": [
-			{
-				"internalType": "address",
-				"name": "",
-				"type": "address"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "renounceOwnership",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
 		"inputs": [
 			{
 				"internalType": "bytes32",
@@ -235,19 +162,6 @@ export const abi = [
 			}
 		],
 		"name": "setRoot",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "newOwner",
-				"type": "address"
-			}
-		],
-		"name": "transferOwnership",
 		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"

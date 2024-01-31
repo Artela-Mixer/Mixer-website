@@ -17,7 +17,7 @@ export const Status = () => {
   useContractEvent({
     address: contractAddress,
     abi: abi,
-    eventName: "VerifyFaild",
+    eventName: "VerifyFailed",
     listener(log) {
       setIsPass("false");
     },

@@ -38,7 +38,6 @@ export const InputForm = () => {
         <div className="flex justify-center">
           <button
             onClick={onClick}
-            disabled={isConnected}
             className="border border-gray hover:bg-gray-300 hover:border-black transition-all w-4/6 p-2 text-2xl rounded border-black"
           >
             <p className="text-4xl">Despoit</p>
